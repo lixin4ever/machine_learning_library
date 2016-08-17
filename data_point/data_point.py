@@ -2,6 +2,7 @@ __author__ = 'lixin77'
 
 import numpy as np
 
+# data point (sample) used in the learning algorithms
 class Sample:
     def __init__(self, features, label, data_type='float64'):
         """
