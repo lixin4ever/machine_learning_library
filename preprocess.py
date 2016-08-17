@@ -34,7 +34,14 @@ def get_word_count(sentences):
     clear_sentences = [preprocess(sen) for sen in sentences]
     cv = CountVectorizer()
     X = cv.fit_transform(clear_sentences)
-    return cv.vocabulary_, X.toarray()
+    X_sparse = []
+    for doc in X.toarray():
+        feature_value_pair = {}
+        for i in xrange(len(doc)):
+            if doc[i]:
+                feature_value_pair[i] = doc[i]
+        X_sparse.append(feature_value_pair)
+    return cv, X_sparse
 
 
 
