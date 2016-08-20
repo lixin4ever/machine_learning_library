@@ -1,9 +1,9 @@
 __author__ = 'lixin77'
 
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB
 from preprocess import *
 import random
-from naive_bayes import multinomial_NB
+from naive_bayes import multinomial_NB, bernoulli_NB
 import numpy as np
 import time
 
@@ -32,8 +32,11 @@ with open('dataset/%s/%s.txt' % (dataset_name, dataset_name)) as fp:
         n_samples += 1
 
 N = 10
-accu_mnb_sklearn = 0.0
-accu_mnb_manual = 0.0
+perf_mnb_sklearn = 0.0
+perf_mnb_manual = 0.0
+
+perf_bnb_sklearn = 0.0
+perf_bnb_manual = 0.0
 
 for y in data:
     random.shuffle(data[y])
@@ -70,27 +73,53 @@ for i in xrange(N):
     mnb_sklearn = MultinomialNB(alpha=0.01)
     mnb_sklearn.fit(X_train, Y_train)
     Y_pred_mnb_sklearn = mnb_sklearn.predict(X_test)
-    print 'time cost of sklearn: %s seconds' % (time.time() - start_time)
+    print 'time cost of sklearn multinomial nb: %s seconds' % (time.time() - start_time)
     assert Y_pred_mnb_sklearn.shape[0] == len(Y_test)
-    perf_mnb_sklearn = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_mnb_sklearn)
-    accu_mnb_sklearn += perf_mnb_sklearn
+    accu_mnb_sklearn = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_mnb_sklearn)
+    perf_mnb_sklearn += accu_mnb_sklearn
+
+    start_time = time.time()
+    bnb_sklearn = BernoulliNB(alpha=1.0)
+    ss = X_train & 1
+    bnb_sklearn.fit(X_train & 1, Y_train)
+    Y_pred_bnb_sklearn = bnb_sklearn.predict(X_test & 1)
+    print 'time cost of sklearn bernoulli nb: %s seconds' % (time.time() - start_time)
+    accu_bnb_sklearn = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_bnb_sklearn)
+    perf_bnb_sklearn += accu_bnb_sklearn
 
     print "run the manually implemented model..."
     start_time = time.time()
-    mnb_manual = multinomial_NB(use_prior=True, alpha=0.01)
+    mnb_manual = multinomial_NB(alpha=0.01)
     mnb_manual.train(X=X_train_sparse, Y=Y_train, vocab=vocab)
     p_Y_X, Y_pred_mnb_manual = mnb_manual.predict(X=X_test_sparse)
-    print 'time cost of manual implementation: %s seconds' % (time.time() - start_time)
+    print 'time cost of manual mnb: %s seconds' % (time.time() - start_time)
     assert Y_pred_mnb_manual.shape[0] == len(Y_test)
-    perf_mnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_mnb_manual)
-    accu_mnb_manual += perf_mnb_manual
-    print "In round %s, sklearn: %s, manual: %s" % (i, perf_mnb_sklearn, perf_mnb_manual)
+    accu_mnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_mnb_manual)
+    perf_mnb_manual += accu_mnb_manual
 
-accu_mnb_manual /= N
-accu_mnb_sklearn /= N
+    start_time = time.time()
+    bnb_manual = bernoulli_NB(alpha=1.0)
+    bnb_manual.train(X=X_train_sparse, Y=Y_train, vocab=vocab)
+    p_Y_X, Y_pred_bnb_manual = bnb_manual.predict(X=X_test & 1)
+    print 'time cost of manual bnb: %s seconds' % (time.time() - start_time)
+    accu_bnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_bnb_manual)
+    perf_bnb_manual += accu_bnb_manual
 
-print "performance of multinomial NB model in sklearn is %s%%" % (100 * accu_mnb_sklearn)
-print "performance of multinomial NB model implemented by myself is %s%%" % (100 * accu_mnb_manual)
+    print "Multinomial NB model, sklearn: %s, manual: %s" % (accu_mnb_sklearn, accu_mnb_manual)
+    print "Bernoulli NB model, sklearn: %s, manual: %s" % (accu_bnb_sklearn, accu_bnb_manual)
+
+perf_mnb_manual /= N
+perf_mnb_sklearn /= N
+
+perf_mnb_manual /= N
+perf_mnb_sklearn /= N
+
+
+print "performance of multinomial NB model in sklearn is %s%%" % (100 * perf_mnb_sklearn)
+print "performance of multinomial NB model implemented by myself is %s%%" % (100 * perf_mnb_manual)
+
+print "performance of bernoulli NB model in sklearn %s%%" % (100 * perf_bnb_sklearn)
+print "performance of bernoulli NB model implemented by myself is %s%%" % (100 * perf_bnb_manual)
 
 
 
