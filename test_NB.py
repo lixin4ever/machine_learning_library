@@ -111,8 +111,8 @@ for i in xrange(N):
 perf_mnb_manual /= N
 perf_mnb_sklearn /= N
 
-perf_mnb_manual /= N
-perf_mnb_sklearn /= N
+perf_bnb_manual /= N
+perf_bnb_sklearn /= N
 
 
 print "performance of multinomial NB model in sklearn is %s%%" % (100 * perf_mnb_sklearn)
