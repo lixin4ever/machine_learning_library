@@ -90,8 +90,6 @@ class bernoulli_NB(object):
         # self.class_count ==>> number of training samples in each class
         # self.class_count_summary ==>> word count in each class
         self.class_count, self.class_count_summary = np.zeros(self.n_class), np.zeros((self.n_class, len(vocab)))
-        print "number of words in vocabulary", len(vocab)
-
         # number of training samples
         self.n_train = len(X)
         for (sen, y) in zip(X, Y):
@@ -111,7 +109,6 @@ class bernoulli_NB(object):
         p_y = [float(self.class_count[i] + self.alpha) / (self.n_train + len(self.class_count) * self.alpha)
                for i in xrange(len(self.class_count))]
         p_x_y = np.zeros((self.n_class, len(self.vocab)))
-        print "size of p_x_y is", p_x_y.shape
         for y in labels:
             # number of word tokens in the class
             word_count = 0
@@ -137,5 +134,62 @@ class bernoulli_NB(object):
         return score, np.argmax(score, axis=1)
 
 class gaussian_NB(object):
-    pass
+
+    def __init__(self, alpha=1):
+        # note: the smoother alpha in gaussian NB model is just used in computing class probability
+        self.alpha = alpha
+
+    def train(self, X, Y, vocab):
+        """
+        train a gaussian naive bayes model for text classification
+        :param X: document-term matrix of the training set
+        :param Y: ground truth label of the training set
+        :param vocab: vocabulary built from the training documents
+        """
+        self.vocab = vocab
+        self.n_class = len(set(Y))
+        self.n_train = len(X)
+        self.class_count, self.class_count_summary = np.zeros(self.n_class), np.zeros((self.n_class, len(self.vocab)))
+        for(sen, y) in zip(X, Y):
+            self.class_count[y] += 1
+            assert len(sen) == len(self.vocab)
+            for i in xrange(len(sen)):
+                wid = i
+                # frequency count of wid in the sentence
+                if sen[wid]:
+                    self.class_count_summary[y][wid] += (sen[wid] * 1.0)
+        # compute mean value for each row (distribution)
+        self.means = np.average(self.class_count_summary, axis=1)
+        assert self.means.shape[0] == self.n_class
+        # variances of each distribution
+        self.vars = np.average((self.class_count_summary - self.means.reshape(self.n_class, 1)) ** 2, axis=1)
+        assert self.vars.shape[0] == self.n_class
+
+
+    def predict(self, X):
+        """
+        predict labels for the testing set
+        :param X: document-term matrix of testing set
+        """
+        labels = range(self.n_class)
+        # 2-d probability matrix
+        score = np.zeros((len(X), self.n_class))
+        # class probability
+        p_y = np.zeros(self.n_class)
+        for y in labels:
+            p_y[y] = (self.class_count[y] + self.alpha) / (self.n_train + self.n_class * self.alpha)
+        pi = math.pi
+        for i in xrange(len(X)):
+            for y in labels:
+                score[i][y] += math.log(p_y[y])
+                # mean value and variance of the current distribution
+                mean = self.means[y]
+                var = self.vars[y]
+                for j in xrange(len(X[i])):
+                    wid = j
+                    w_count = X[i][j]
+                    # smoother is not used
+                    p_w_y = math.exp((w_count - mean) ** 2 * (-1) / (2 * var)) / (math.sqrt(2 * pi * var))
+                    score[i][y] += math.log(p_w_y)
+        return score, np.argmax(score, axis=1)
 
