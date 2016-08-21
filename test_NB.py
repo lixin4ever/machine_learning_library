@@ -1,9 +1,9 @@
 __author__ = 'lixin77'
 
-from sklearn.naive_bayes import MultinomialNB, BernoulliNB
+from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
 from preprocess import *
 import random
-from naive_bayes import multinomial_NB, bernoulli_NB
+from naive_bayes import multinomial_NB, bernoulli_NB, gaussian_NB
 import numpy as np
 import time
 
@@ -38,6 +38,10 @@ perf_mnb_manual = 0.0
 perf_bnb_sklearn = 0.0
 perf_bnb_manual = 0.0
 
+perf_gnb_sklearn = 0.0
+perf_gnb_manual = 0.0
+
+# shuffle the data
 for y in data:
     random.shuffle(data[y])
 
@@ -80,12 +84,20 @@ for i in xrange(N):
 
     start_time = time.time()
     bnb_sklearn = BernoulliNB(alpha=1.0)
-    ss = X_train & 1
     bnb_sklearn.fit(X_train & 1, Y_train)
     Y_pred_bnb_sklearn = bnb_sklearn.predict(X_test & 1)
     print 'time cost of sklearn bernoulli nb: %s seconds' % (time.time() - start_time)
     accu_bnb_sklearn = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_bnb_sklearn)
     perf_bnb_sklearn += accu_bnb_sklearn
+
+    start_time = time.time()
+    gnb_sklearn = GaussianNB()
+    gnb_sklearn.fit(X_train, Y_train)
+    Y_pred_gnb_sklearn = gnb_sklearn.predict(X_test)
+    print 'time cost of sklearn gaussian nb: %s seconds' % (time.time() - start_time)
+    accu_gnb_sklearn = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_gnb_sklearn)
+    perf_gnb_sklearn += accu_gnb_sklearn
+
 
     print "run the manually implemented model..."
     start_time = time.time()
@@ -105,14 +117,26 @@ for i in xrange(N):
     accu_bnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_bnb_manual)
     perf_bnb_manual += accu_bnb_manual
 
+    start_time = time.time()
+    gnb_manual = gaussian_NB()
+    gnb_manual.train(X=X_train, Y=Y_train, vocab=vocab)
+    p_Y_X, Y_pred_gnb_manual = gnb_manual.predict(X=X_test)
+    print 'time cost of manual gnb: %s seconds' % (time.time() - start_time)
+    accu_gnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_gnb_manual)
+    perf_gnb_manual += accu_gnb_manual
+
     print "Multinomial NB model, sklearn: %s, manual: %s" % (accu_mnb_sklearn, accu_mnb_manual)
     print "Bernoulli NB model, sklearn: %s, manual: %s" % (accu_bnb_sklearn, accu_bnb_manual)
+    print "Gaussian NB model, sklearn: %s, manual: %s" % (accu_gnb_sklearn, accu_gnb_manual)
 
 perf_mnb_manual /= N
 perf_mnb_sklearn /= N
 
 perf_bnb_manual /= N
 perf_bnb_sklearn /= N
+
+perf_gnb_manual /= N
+perf_gnb_sklearn /= N
 
 
 print "performance of multinomial NB model in sklearn is %s%%" % (100 * perf_mnb_sklearn)
@@ -121,7 +145,8 @@ print "performance of multinomial NB model implemented by myself is %s%%" % (100
 print "performance of bernoulli NB model in sklearn %s%%" % (100 * perf_bnb_sklearn)
 print "performance of bernoulli NB model implemented by myself is %s%%" % (100 * perf_bnb_manual)
 
-
+print "performance of gaussian NB model in sklearn %s%%" % (100 * perf_gnb_sklearn)
+print "performance of gaussian NB model implemented by myself is %s%%" % (100 * perf_gnb_manual)
 
 
 
