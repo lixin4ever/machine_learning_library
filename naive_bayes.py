@@ -135,7 +135,7 @@ class bernoulli_NB(object):
 
 class gaussian_NB(object):
 
-    def __init__(self, alpha=1):
+    def __init__(self, alpha=0.01):
         # note: the smoother alpha in gaussian NB model is just used in computing class probability
         self.alpha = alpha
 
@@ -172,7 +172,7 @@ class gaussian_NB(object):
         :param X: document-term matrix of testing set
         """
         labels = range(self.n_class)
-        # 2-d probability matrix
+        # 2-d matrix records the log likelihood value
         score = np.zeros((len(X), self.n_class))
         # class probability
         p_y = np.zeros(self.n_class)
@@ -186,10 +186,10 @@ class gaussian_NB(object):
                 mean = self.means[y]
                 var = self.vars[y]
                 for j in xrange(len(X[i])):
-                    wid = j
                     w_count = X[i][j]
                     # smoother is not used
-                    p_w_y = math.exp((w_count - mean) ** 2 * (-1) / (2 * var)) / (math.sqrt(2 * pi * var))
-                    score[i][y] += math.log(p_w_y)
+                    score[i][y] += (-0.5 * math.log(2 * pi * var))
+                    score[i][y] += (-1 * (w_count - mean) ** 2 / (2 * var))
+                    #p_w_y = math.exp((w_count - mean) ** 2 * (-1) / (2 * var)) / (math.sqrt(2 * pi * var))
         return score, np.argmax(score, axis=1)
 
