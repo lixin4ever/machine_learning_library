@@ -8,7 +8,7 @@ A list of supervised learning algorithm implemented by myself for text classific
 10-fold cross-validation is employed to measure the generalization performance of the trained model.
 
 ## Experiment results
-Dataset | `bernoulli NB` | `bernoulli NB (sklearn)` | `multinomial NB` | `multinomial NB (sklearn)`
+Dataset | `bernoulli NB` | `bernoulli NB (sklearn)` | `multinomial NB` | `multinomial NB (sklearn)` | `gaussian NB` | `gaussian NB (sklearn)` 
 --- | --- | --- | --- | ---
-MR | 75.76% | 77.78% | 74.15% | 74.15%
+MR | 75.76% | 77.78% | 74.15% | 74.15% | 66.58% | 66.58%
 //Todo
