@@ -109,16 +109,9 @@ class bernoulli_NB(object):
         p_y = [float(self.class_count[i] + self.alpha) / (self.n_train + len(self.class_count) * self.alpha)
                for i in xrange(len(self.class_count))]
         p_x_y = np.zeros((self.n_class, len(self.vocab)))
+        class_word_count = np.sum(self.class_count_summary, axis=1)
         for y in labels:
-            # number of word tokens in the class
-            word_count = 0
-            for j in xrange(len(self.class_count_summary[y])):
-                wid = j
-                if self.class_count_summary[y][wid] > 0:
-                    word_count += self.class_count_summary[y][wid]
-            for j in xrange(len(self.class_count_summary[y])):
-                wid = j
-                p_x_y[y][wid] = (self.class_count_summary[y][wid] + self.alpha) / (word_count + 2 * self.alpha)
+            p_x_y[y, :] = (self.class_count_summary[y] + self.alpha) / (class_word_count[y] + 2 * self.alpha)
         for i in xrange(len(X)):
             x = X[i]
             # pre-process and tokenize the input testing text
@@ -184,6 +177,7 @@ class gaussian_NB(object):
             sen = X[i]
             assert sen.shape[0] == self.means.shape[1]
             for y in labels:
+                # calculate log likelihood
                 score[i][y] += math.log(p_y[y])
                 score[i][y] += (-0.5) * np.sum(np.log(2 * pi * self.vars[y]))
                 score[i][y] += (-0.5) * np.sum((sen - self.means[y]) ** 2 / self.vars[y])
