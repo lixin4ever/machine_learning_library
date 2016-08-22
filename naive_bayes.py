@@ -145,14 +145,12 @@ class gaussian_NB(object):
         self.class_count = np.zeros(self.n_class)
         for y in Y:
             self.class_count[y] += 1
-        print "number of training samples:", self.n_train
         self.means = np.zeros((self.n_class, len(self.vocab)))
         self.vars = np.zeros((self.n_class, len(self.vocab)))
 
         for y in xrange(self.n_class):
             class_documents = [X[i] for i in xrange(len(Y)) if Y[i] == y]
             class_documents = np.array(class_documents)
-            print "%s documents in class %s" % (class_documents.shape[0], y)
             # calculate mean and variance of each dimension (feature) given the feature vectors
             self.means[y, :] = np.mean(class_documents, axis=0)
             self.vars[y, :] = np.var(class_documents, axis=0)

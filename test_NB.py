@@ -109,6 +109,7 @@ for i in xrange(N):
     accu_mnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_mnb_manual)
     perf_mnb_manual += accu_mnb_manual
 
+
     start_time = time.time()
     bnb_manual = bernoulli_NB(alpha=1.0)
     bnb_manual.train(X=X_train_sparse, Y=Y_train, vocab=vocab)
@@ -116,6 +117,7 @@ for i in xrange(N):
     print 'time cost of manual bnb: %s seconds' % (time.time() - start_time)
     accu_bnb_manual = compute_accu(Y_gold=Y_test, Y_pred=Y_pred_bnb_manual)
     perf_bnb_manual += accu_bnb_manual
+
 
     start_time = time.time()
     gnb_manual = gaussian_NB()
