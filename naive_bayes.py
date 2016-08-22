@@ -149,27 +149,28 @@ class gaussian_NB(object):
         self.vocab = vocab
         self.n_class = len(set(Y))
         self.n_train = len(X)
-        self.class_count, self.class_count_summary = np.zeros(self.n_class), np.zeros((self.n_class, len(self.vocab)))
-        for(sen, y) in zip(X, Y):
+        self.class_count = np.zeros(self.n_class)
+        for y in Y:
             self.class_count[y] += 1
-            assert len(sen) == len(self.vocab)
-            for i in xrange(len(sen)):
-                wid = i
-                # frequency count of wid in the sentence
-                if sen[wid]:
-                    self.class_count_summary[y][wid] += (sen[wid] * 1.0)
-        # compute mean value for each row (distribution)
-        self.means = np.average(self.class_count_summary, axis=1)
-        assert self.means.shape[0] == self.n_class
-        # variances of each distribution
-        self.vars = np.average((self.class_count_summary - self.means.reshape(self.n_class, 1)) ** 2, axis=1)
-        assert self.vars.shape[0] == self.n_class
+        print "number of training samples:", self.n_train
+        self.means = np.zeros((self.n_class, len(self.vocab)))
+        self.vars = np.zeros((self.n_class, len(self.vocab)))
+
+        for y in xrange(self.n_class):
+            class_documents = [X[i] for i in xrange(len(Y)) if Y[i] == y]
+            class_documents = np.array(class_documents)
+            print "%s documents in class %s" % (class_documents.shape[0], y)
+            # calculate mean and variance of each dimension (feature) given the feature vectors
+            self.means[y, :] = np.mean(class_documents, axis=0)
+            self.vars[y, :] = np.var(class_documents, axis=0)
+        epsilon = 1e-9 * np.var(X, axis=0).max()
+        self.vars += epsilon
 
 
     def predict(self, X):
         """
         predict labels for the testing set
-        :param X: document-term matrix of testing set
+        :param X: the document-term matrix derived from testing set
         """
         labels = range(self.n_class)
         # 2-d matrix records the log likelihood value
@@ -180,16 +181,11 @@ class gaussian_NB(object):
             p_y[y] = (self.class_count[y] + self.alpha) / (self.n_train + self.n_class * self.alpha)
         pi = math.pi
         for i in xrange(len(X)):
+            sen = X[i]
+            assert sen.shape[0] == self.means.shape[1]
             for y in labels:
                 score[i][y] += math.log(p_y[y])
-                # mean value and variance of the current distribution
-                mean = self.means[y]
-                var = self.vars[y]
-                for j in xrange(len(X[i])):
-                    w_count = X[i][j]
-                    # smoother is not used
-                    score[i][y] += (-0.5 * math.log(2 * pi * var))
-                    score[i][y] += (-1 * (w_count - mean) ** 2 / (2 * var))
-                    #p_w_y = math.exp((w_count - mean) ** 2 * (-1) / (2 * var)) / (math.sqrt(2 * pi * var))
+                score[i][y] += (-0.5) * np.sum(np.log(2 * pi * self.vars[y]))
+                score[i][y] += (-0.5) * np.sum((sen - self.means[y]) ** 2 / self.vars[y])
         return score, np.argmax(score, axis=1)
 
