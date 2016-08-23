@@ -1,11 +1,12 @@
 __author__ = 'lixin77'
 
+import random
+import time
+
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
 from preprocess import *
-import random
-from naive_bayes import multinomial_NB, bernoulli_NB, gaussian_NB
+from model.naive_bayes import multinomial_NB, bernoulli_NB, gaussian_NB
 import numpy as np
-import time
 
 
 def compute_accu(Y_gold, Y_pred):
