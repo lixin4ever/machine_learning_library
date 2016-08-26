@@ -3,6 +3,7 @@ A list of supervised learning algorithm implemented by myself for text classific
 
 ## Prerequisites
 * [scikit-learn](http://scikit-learn.org/) (>=0.17, for comparison and textual data processing)
+* [numpy](http://www.numpy.org/) (for list element operation)
 
 ## Settings
 10-fold cross-validation is employed to measure the generalization performance of the trained model.
