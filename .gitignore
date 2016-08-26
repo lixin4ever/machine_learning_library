@@ -1,4 +1,5 @@
 __init__.py
 *.xml
-.name
-.DS_store
+*.name
+*.DS_store
+*.pyc
