@@ -766,7 +766,7 @@
 0	this is not a router i would suggest for a novice user , my old dlink di52 ! .
 0	the internet connection would go down every 5 mins when i used it with a p2p program called bit spirit .
 0	so-so 1 . customer service - 6 calls half were efficient other half were equally incompetent .
-0	
+0	#
 0	both of them keep disconnecting on me and interruptions are 3 or 4 times per day at best .
 0	stay away from this junk .
 0	was a bit wary because the software is windows only and i have an mac .
@@ -1365,7 +1365,7 @@
 0	of course , if you try to reach symantec customer service you get useless automated systems unless you want to pay $30 per incident .
 0	this time , it started the installation process , then i left for work . i think it will work . i hope it will work .
 0	i simply hate symantec . i swear , if i could have physically ripped that software out of my computer with my bare , bleeding hands , i would have .
-0	
+0	#
 1	im a more happier person after discovering the i/p button ! .
 1	but , if you 're looking for my opinion of the apex dvd player , i love it ! .
 1	it practically plays almost everything you give it .
@@ -3688,7 +3688,7 @@
 1	finding all the albums , songs etc is much easier than you would think it would be even if you have 20 gig ( well 18 gig ) worth of music .
 1	it all sounds great too .
 1	you can even use the ipod to store files from your pc and export your outlook files to it .
-1	
+1	#
 1	so reliability is the winner here for the ipod .
 1	for looks , well ipod is head and shoulders better , both the iriver and creative zen look positively ugly when next to a gleaming ipod .
 1	the ipod package comes with everything you need , the ac adaptor , firewire cable ( quicker than usb , but slower than usb 2 which it also gives ) , those snazzy and power full headphones , and of course the player .
