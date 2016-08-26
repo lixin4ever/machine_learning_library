@@ -17,7 +17,7 @@ def compute_accu(Y_gold, Y_pred):
             hit_count += 1
     return float(hit_count) / len(Y_gold)
 
-dataset_name = 'MR'
+dataset_name = 'CR'
 
 data = {}
 
@@ -25,6 +25,7 @@ n_samples = 0
 
 with open('dataset/%s/%s.txt' % (dataset_name, dataset_name)) as fp:
     for line in fp:
+        print line
         label, text = line.strip().split('\t')
         try:
             data[int(label)].append(line.strip())
@@ -65,8 +66,8 @@ for i in xrange(N):
             else:
                 Y_train.append(int(label))
                 train_sen.append(x)
-    print 'number of training samples', len(train_sen)
-    print 'number of testing samples', len(test_sen)
+    print 'n_train', len(train_sen)
+    print 'n_test', len(test_sen)
     Y_test = np.array(Y_test)
     print "build the dataset..."
     start_time = time.time()
