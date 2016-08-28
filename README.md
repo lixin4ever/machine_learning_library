@@ -9,6 +9,7 @@ A list of supervised learning algorithm implemented by myself for text classific
 * `Multinomial naive Bayes`: alpha=0.01
 * `Bernoulli naive Bayes`: alpha=1.0
 * `Gaussian naive Bayes`: alpha=1.0
+
 Note: 10-fold cross-validation is employed to measure the generalization performance of the trained model.
 
 ## Experiment results
