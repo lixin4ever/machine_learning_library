@@ -1,4 +1,4 @@
-## Machine learning library
+## Supervised learning library
 A list of supervised learning algorithm implemented by myself for text classification.
 
 ## Prerequisites
