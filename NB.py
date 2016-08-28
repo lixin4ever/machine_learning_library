@@ -4,7 +4,6 @@ import random
 import time
 
 from sklearn.naive_bayes import MultinomialNB, BernoulliNB, GaussianNB
-from preprocess import *
 from model.naive_bayes import multinomial_NB, bernoulli_NB, gaussian_NB
 import numpy as np
 from test.utils import *

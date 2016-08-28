@@ -1,6 +1,5 @@
 __author__ = 'lixin77'
 
-from preprocess import *
 import math
 import numpy as np
 
