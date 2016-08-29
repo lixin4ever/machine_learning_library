@@ -112,13 +112,14 @@ def compute_accu(Y_gold, Y_pred):
             hit_count += 1
     return float(hit_count) / len(Y_gold)
 
-def cv(data_path, models, model_names, k=5):
+def cv(data_path, models, model_names, k=10):
     """
     perform K-fold cross validation on the dataset
     :param data_path: path of the data file
     :param models: models used in the experiment
     :param model_names: name of models
-    :param k: value of K
+    :param k: number of fold, default value is 10, i.e., 10-fold cross-validation will be performed
+    in the default case
     """
     data = {}
     n_sample = 0
@@ -161,7 +162,8 @@ def cv(data_path, models, model_names, k=5):
             Y_pred, p_y_x = m.predict(X=X_test)
             accu = compute_accu(Y_gold=Y_test, Y_pred=Y_pred)
             perf[j] += accu
-            print '%s: %s\n\n' % (m_name, accu)
+            print '%s: %s' % (m_name, accu)
+        print "\n\n"
     for i in xrange(n_models):
         print '%s: %s' % (model_names[j], perf[i] / k)
 

@@ -1,4 +1,5 @@
 __author__ = 'lixin77'
+# testing file of naive Bayes model
 
 import random
 import time
