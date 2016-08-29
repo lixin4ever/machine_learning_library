@@ -4,6 +4,8 @@ __author__ = 'lixin77'
 
 from sklearn.feature_extraction.text import CountVectorizer
 import re
+import random
+import numpy as np
 
 def preprocess(sentence):
     """
@@ -109,4 +111,57 @@ def compute_accu(Y_gold, Y_pred):
         if Y_gold[i] == Y_pred[i]:
             hit_count += 1
     return float(hit_count) / len(Y_gold)
+
+def cv(data_path, models, model_names, k=5):
+    """
+    perform K-fold cross validation on the dataset
+    :param data_path: path of the data file
+    :param models: models used in the experiment
+    :param model_names: name of models
+    :param k: value of K
+    """
+    data = {}
+    n_sample = 0
+    n_models = len(models)
+    with open(data_path, 'r') as fp:
+        for line in fp:
+            label, text = line.strip().split('\t')
+            label = int(label)
+            try:
+                data[label].append(line.strip())
+            except KeyError:
+                data[label] = [line.strip()]
+            n_sample += 1
+    for label in data:
+        random.shuffle(data[label])
+    perf = np.zeros(n_models)
+    for i in xrange(k):
+        print "in the round", i
+        train_sen = []
+        test_sen = []
+        Y_train = []
+        Y_test = []
+        for label in data:
+            n_one_fold = int(len(data[label]) * 0.1)
+            for j in xrange(len(data[label])):
+                y, x = data[label][j].split('\t')
+                y = int(y)
+                if i * n_one_fold <= j < (i + 1) * n_one_fold:
+                    test_sen.append(x)
+                    Y_test.append(y)
+                else:
+                    train_sen.append(x)
+                    Y_train.append(y)
+        Y_test = np.array(Y_test)
+        X_train, X_train_sparse, X_test, X_test_sparse, vocab = build_dataset(train_sen=train_sen, test_sen=test_sen)
+        for j in xrange(n_models):
+            m = models[j]
+            m_name = model_names[j]
+            m.train(X=X_train, Y=Y_train, vocab=vocab)
+            Y_pred, p_y_x = m.predict(X=X_test)
+            accu = compute_accu(Y_gold=Y_test, Y_pred=Y_pred)
+            perf[j] += accu
+            print '%s: %s\n\n' % (m_name, accu)
+    for i in xrange(n_models):
+        print '%s: %s' % (model_names[j], perf[i] / k)
 

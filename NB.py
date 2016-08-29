@@ -17,7 +17,6 @@ n_samples = 0
 
 with open('dataset/%s/%s.txt' % (dataset_name, dataset_name)) as fp:
     for line in fp:
-        print line
         label, text = line.strip().split('\t')
         try:
             data[int(label)].append(line.strip())
