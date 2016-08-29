@@ -4,6 +4,7 @@ import math
 import numpy as np
 
 # naive bayes models
+
 class NB(object):
     pass
 

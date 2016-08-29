@@ -2,6 +2,7 @@ __author__ = 'lixin77'
 
 import numpy as np
 
+
 def manhattan_distance(x1, x2):
     """
     Manhattan distance between vector x1 and x2
