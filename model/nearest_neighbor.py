@@ -50,11 +50,11 @@ class KNN:
             sorted_pairs = np.array(zip(self.Y_train, distance), dtype=[('x', 'int'), ('y', 'float')])
             sorted_pairs.sort(order='y')
             class_count = np.zeros(self.n_class)
-            for k in xrange(K):
+            for k in xrange(self.K):
                 y, d = sorted_pairs[k]
                 class_count[y] += 1
             Y_pred.append(np.argmax(class_count))
-        return Y_pred
+        return [], Y_pred
 
 
 
