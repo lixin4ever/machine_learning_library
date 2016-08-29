@@ -158,8 +158,14 @@ def cv(data_path, models, model_names, k=10):
         for j in xrange(n_models):
             m = models[j]
             m_name = model_names[j]
-            m.train(X=X_train, Y=Y_train, vocab=vocab)
-            Y_pred, p_y_x = m.predict(X=X_test)
+            if j % 2:
+                m.fit(X_train, Y_train)
+            else:
+                m.train(X=X_train, Y=Y_train, vocab=vocab)
+            if j % 2:
+                Y_pred = m.predict(X_test)
+            else:
+                Y_pred, p_y_x = m.predict(X=X_test)
             accu = compute_accu(Y_gold=Y_test, Y_pred=Y_pred)
             perf[j] += accu
             print '%s: %s' % (m_name, accu)
