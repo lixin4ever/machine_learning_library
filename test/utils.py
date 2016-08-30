@@ -105,6 +105,8 @@ def build_dataset(train_sen, test_sen):
     return X_train, X_train_sparse, X_test, X_test_sparse, vocab
 
 def compute_accu(Y_gold, Y_pred):
+    print 'n_gold:', len(Y_gold)
+    print 'n_pred:', len(Y_pred)
     assert len(Y_gold) == len(Y_pred)
     hit_count = 0
     for i in xrange(len(Y_gold)):
@@ -169,7 +171,6 @@ def cv(data_path, models, model_names, k=10):
             accu = compute_accu(Y_gold=Y_test, Y_pred=Y_pred)
             perf[j] += accu
             print '%s: %s' % (m_name, accu)
-        print "\n\n"
     for i in xrange(n_models):
         print '%s: %s' % (model_names[i], perf[i] / k)
 

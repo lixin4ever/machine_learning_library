@@ -59,7 +59,7 @@ class KNN:
                 y, d = sorted_pairs[k]
                 class_count[y] += 1
             Y_pred.append(np.argmax(class_count))
-        return [], Y_pred
+        return Y_pred, []
 
 
 class nearest_centroid:
@@ -89,7 +89,7 @@ class nearest_centroid:
         :param X: doc-term matrix of training documents
         """
         # note, p_y_x will not be derived in this algorithm
-        res, p_y_x = [], []
+        Y_pred, p_y_x = [], []
         for x in X:
             class_dis = []
             for i in xrange(self.n_classes):
@@ -97,8 +97,8 @@ class nearest_centroid:
                     class_dis.append(euclidean_distance(x1=x, x2=self.class_centroid[i]))
                 else:
                     class_dis.append(manhattan_distance(x1=x, x2=self.class_centroid[i]))
-            res.append(np.argmin(class_dis))
-        return p_y_x, res
+            Y_pred.append(np.argmin(class_dis))
+        return Y_pred, p_y_x
 
 
 
