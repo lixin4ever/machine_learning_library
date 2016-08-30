@@ -171,5 +171,5 @@ def cv(data_path, models, model_names, k=10):
             print '%s: %s' % (m_name, accu)
         print "\n\n"
     for i in xrange(n_models):
-        print '%s: %s' % (model_names[j], perf[i] / k)
+        print '%s: %s' % (model_names[i], perf[i] / k)
 
