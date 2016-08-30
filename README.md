@@ -22,8 +22,8 @@ SUBJ | 91.9% | 91.67% | 91.15% | 91.26% | 80.72% | 80.72%
 CR | 79.28% | 77.20% | 76.89% | 76.89% | 55.80% | 55.80%
 MPQA | 84.01% | 83.90% | 84.98% | 84.84% | 70.31% | 70.31%
 
-#### k-nearest neighbor
-Dataset | `KNN` | `KNN (sklearn)`
---- | --- | ---
-MR | 53.68% | 60.03%
+#### k-nearest neighbor & nearest centroid
+Dataset | `KNN` | `KNN (sklearn)` | `Nearest Centroid` | `Nearest Centroid (sklearn)`
+--- | --- | --- | --- | ---
+MR | 53.68% | 60.03% | 59.04% | 59.04% 
 //Todo
