@@ -26,5 +26,8 @@ MPQA | 84.01% | 83.90% | 84.98% | 84.84% | 70.31% | 70.31%
 #### k-nearest neighbor & nearest centroid
 Dataset | `KNN` | `KNN (sklearn)` | `Nearest Centroid` | `Nearest Centroid (sklearn)`
 --- | --- | --- | --- | ---
-MR | 53.68% | 60.03% | 59.04% | 59.04% 
+MR | 53.68% | 60.03% | 59.04% | 59.04%
+SUBJ | - | - | 73.40% | 73.40%
+CR | - | - | 65.45% | 65,45%
+MPQA | - | - | 48.15% | 48.15% 
 //Todo
