@@ -2,8 +2,9 @@ __author__ = 'lixin77'
 
 # testing file of nearest neighbour
 
-from model.nearest_neighbor import KNN
+from model.nearest_neighbor import KNN, nearest_centroid
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors.nearest_centroid import NearestCentroid
 from test.utils import cv
 
 dataset_name = 'MR'
@@ -12,12 +13,13 @@ data_path = './dataset/%s/%s.txt' % (dataset_name, dataset_name)
 
 #
 models = [
-    KNN(K=10), KNeighborsClassifier(n_neighbors=10)
+    nearest_centroid(),
+    NearestCentroid()
 ]
 
 model_names = [
-    'KNN',
-    'KNN (sklearn)'
+    'Nearest_Centroid',
+    'Nearest_Centroid (sklearn)'
 ]
 
 # perform k-fold cross validation
