@@ -79,7 +79,7 @@ class nearest_centroid:
         self.class_centroid = []
         Y = np.array(Y)
         for i in xrange(self.n_classes):
-            mask = (self.Y == i)
+            mask = (Y == i)
             self.class_centroid.append(X[mask].mean(axis=0))
         self.class_centroid = np.array(self.class_centroid)
 
