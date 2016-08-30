@@ -10,6 +10,7 @@ A list of supervised learning algorithm implemented by myself for text classific
 * `Bernoulli naive Bayes`: alpha=1.0
 * `Gaussian naive Bayes`: alpha=1.0
 * `K-Nearest Neighborhood`: k=10+Manhatten Distance
+* `Nearest Centroid`: Euclidean distance metric
 
 Note: 10-fold cross-validation is employed to measure the generalization performance of the trained model.
 
