@@ -43,7 +43,7 @@ def build_dict(sentences):
                 vocab[w] = vocab_size
                 indexed_vocab[vocab_size] = w
                 vocab_size += 1
-    print "number of distinct words in the training set:", vocab_size
+    print("number of distinct words in the training set:", vocab_size)
     return vocab, indexed_vocab, word_to_count
 
 def tokenization(sentences, word_to_count, vocab):
@@ -84,7 +84,7 @@ def build_dataset(train_sen, test_sen):
     X_train_sparse = []
     for x in X_train:
         x_sparse = {}
-        for i in xrange(len(x)):
+        for i in range(len(x)):
             word_count = x[i]
             if word_count > 0:
                 x_sparse[i] = word_count
@@ -96,7 +96,7 @@ def build_dataset(train_sen, test_sen):
     X_test_sparse = []
     for x in X_test:
         x_sparse = {}
-        for j in xrange(len(x)):
+        for j in range(len(x)):
             word_count = x[j]
             if word_count > 0:
                 x_sparse[j] = word_count
@@ -107,7 +107,7 @@ def build_dataset(train_sen, test_sen):
 def compute_accu(Y_gold, Y_pred):
     assert len(Y_gold) == len(Y_pred)
     hit_count = 0
-    for i in xrange(len(Y_gold)):
+    for i in range(len(Y_gold)):
         if Y_gold[i] == Y_pred[i]:
             hit_count += 1
     return float(hit_count) / len(Y_gold)
@@ -136,15 +136,15 @@ def cv(data_path, models, model_names, k=10):
     for label in data:
         random.shuffle(data[label])
     perf = np.zeros(n_models)
-    for i in xrange(k):
-        print "in the round", i
+    for i in range(k):
+        print("in the round", i)
         train_sen = []
         test_sen = []
         Y_train = []
         Y_test = []
         for label in data:
             n_one_fold = int(len(data[label]) * 0.1)
-            for j in xrange(len(data[label])):
+            for j in range(len(data[label])):
                 y, x = data[label][j].split('\t')
                 y = int(y)
                 if i * n_one_fold <= j < (i + 1) * n_one_fold:
@@ -155,7 +155,7 @@ def cv(data_path, models, model_names, k=10):
                     Y_train.append(y)
         Y_test = np.array(Y_test)
         X_train, X_train_sparse, X_test, X_test_sparse, vocab = build_dataset(train_sen=train_sen, test_sen=test_sen)
-        for j in xrange(n_models):
+        for j in range(n_models):
             m = models[j]
             m_name = model_names[j]
             if j % 2:
@@ -168,7 +168,7 @@ def cv(data_path, models, model_names, k=10):
                 Y_pred, p_y_x = m.predict(X=X_test)
             accu = compute_accu(Y_gold=Y_test, Y_pred=Y_pred)
             perf[j] += accu
-            print '%s: %s' % (m_name, accu)
-    for i in xrange(n_models):
-        print '%s: %s' % (model_names[i], perf[i] / k)
+            print('%s: %s' % (m_name, accu))
+    for i in range(n_models):
+        print('%s: %s' % (model_names[i], perf[i] / k))
 
